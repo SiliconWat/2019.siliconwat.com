@@ -17,9 +17,9 @@ class TlHeader extends HTMLElement {
 
     #private_menu = [
         { title: "Menu: Home", page: "/" },
-        { title: "To Pack", page: "/private/pack/" },
-        { title: "To Lock Up", page: "/private/lockup/" },
-        { title: "Vacay", page: "/private/vacay/" }
+        { title: "Vacay", page: "/private/vacay/" },
+        { title: "To Pack", page: "/private/pack/", submenu: true },
+        { title: "To Lock", page: "/private/lock/", submenu: true }
     ];
 
     constructor() {

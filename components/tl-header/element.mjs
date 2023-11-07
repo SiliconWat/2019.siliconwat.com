@@ -1,7 +1,7 @@
 import template from './template.mjs';
 
 class TlHeader extends HTMLElement {
-    #username = "thonly";
+    #usernames = ["thonly", "pan"];
 
     #public_menu = [
         { title: "Menu: Home", page: "/" },
@@ -11,8 +11,7 @@ class TlHeader extends HTMLElement {
         { title: "Guest Bedroom", page: "/public/guest/", submenu: true },
         { title: "Living Room", page: "/public/living/", submenu: true },
         { title: "Kitchen", page: "/public/kitchen/", submenu: true },
-        { title: "Bathroom", page: "/public/bathroom/", submenu: true },
-        { title: "Back Yard", page: "/public/backyard/" }
+        { title: "Bathroom", page: "/public/bathroom/", submenu: true }
     ];
 
     #private_menu = [
@@ -40,22 +39,35 @@ class TlHeader extends HTMLElement {
         if (a) a.style.color = "black";
     }
 
+    get #menu() {
+        switch (localStorage.getItem('credential')) {
+            case "thonly": 
+                return this.#private_menu;
+            case "pan":
+                return [ ...this.#public_menu, { title: "Back Yard", page: "/private/backyard/", bold: true } ];
+            default:
+                return this.#public_menu;
+        }
+    }
+
     render() {
-        const menu = localStorage.getItem('credential') ? this.#private_menu : this.#public_menu;
+        //const menu = localStorage.getItem('credential') ? this.#private_menu : this.#public_menu;
         const ul = this.shadowRoot.querySelector('ul')
         const select = this.shadowRoot.querySelector('select')
         
-        menu.reverse().forEach(item => {
+        this.#menu.reverse().forEach(item => {
             const li = document.createElement('li');
             const a = document.createElement('a');
             a.href = item.page; //a.setAttribute('href', item.page);
             a.textContent = item.title;
+            a.style.fontWeight = item.bold ? "bold" : "normal";
             li.appendChild(a)
             ul.prepend(li)
 
             const option = document.createElement('option');
             option.value = item.page;
             option.textContent = item.submenu ? "- " + item.title : item.title;
+            option.style.fontWeight = item.bold ? "bold" : "normal";
             select.prepend(option);
         });
     }
@@ -72,11 +84,11 @@ class TlHeader extends HTMLElement {
 
     login(button, retry=false) {
         button.disabled = true;
-        let username = window.prompt(retry ? "Incorrect username. Please try again:" : "Please enter your username:");
+        let username = window.prompt(retry ? "Incorrect username. Please try again:" : "Please enter your username:").trim().toLowerCase();
         if (username) {
-            if (username.toLowerCase() === this.#username.toLowerCase()) {
+            if (this.#usernames.includes(username)) {
                 localStorage.setItem('credential', username);
-                document.location = this.#private_menu[1].page;
+                document.location = username === this.#usernames[0] ? this.#private_menu[1].page : this.#menu[this.#menu.length - 1].page;
             } else this.login(button, true)
         } else button.disabled = false;
     }

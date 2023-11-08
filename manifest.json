@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/web-manifest-combined.json",
   "name": "386 N Calaveras St",
-  "short_name": "386 N Calaveras St",
+  "short_name": "386 Calaveras",
   "start_url": "/",
   "display": "standalone",
   "background_color": "skyblue",

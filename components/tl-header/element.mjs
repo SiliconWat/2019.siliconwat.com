@@ -44,7 +44,7 @@ class TlHeader extends HTMLElement {
             case "thonly": 
                 return this.#private_menu;
             case "pan":
-                return [ ...this.#public_menu, { title: "Back Yard", page: "/private/backyard/", bold: true } ];
+                return [ ...this.#public_menu, { title: "Back Yard", page: "/private/backyard/", bold: true }, { title: "Study Plan", page: "/private/studyplan/", bold: true } ];
             default:
                 return this.#public_menu;
         }
